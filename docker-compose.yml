@@ -1,0 +1,32 @@
+services:
+  falco_brain:
+    image: phamvanminh7531/falco_brain:1.1.11
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - dblab_ouput:/ComfyUI/output
+      - dblab_input:/ComfyUI/input
+    ports:
+      - "8188:8188"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: always
+
+volumes:
+  dblab_ouput:
+    driver_opts:
+      type: cifs
+      o: username=dblab,password=DBLab@2025,vers=3.0
+      device: \\192.168.1.254\DBplus\test\OUTPUT
+  dblab_input:
+    driver_opts:
+      type: cifs
+      o: username=dblab,password=DBLab@2025,vers=3.0
+      device: \\192.168.1.254\DBplus\test\INPUT
+      
